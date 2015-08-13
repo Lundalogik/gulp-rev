@@ -307,3 +307,37 @@ it('should be okay when the optional sourcemap.file is not defined', function (c
 		contents: new Buffer(JSON.stringify({}))
 	}));
 });
+
+it('should prefix revHash with hashPrefix', function (cb) {
+	var stream = rev({
+		hashPrefix: 'revisioned'
+	});
+
+	stream.on('data', function (file) {
+		assert.equal(file.path, 'unicorn-revisioned-d41d8cd98f.css');
+		assert.equal(file.revOrigPath, 'unicorn.css');
+		cb();
+	});
+
+	stream.write(new gutil.File({
+		path: 'unicorn.css',
+		contents: new Buffer('')
+	}));
+});
+
+
+it('should store the hashPrefix for later', function (cb) {
+	var stream = rev({
+		hashPrefix: 'revisioned'
+	});
+
+	stream.on('data', function (file) {
+		assert.equal(file.hashPrefix, 'revisioned');
+		cb();
+	});
+
+	stream.write(new gutil.File({
+		path: 'unicorn.css',
+		contents: new Buffer('')
+	}));
+});

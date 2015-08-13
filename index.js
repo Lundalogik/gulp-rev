@@ -44,12 +44,17 @@ function transformFilename(file) {
 	file.revOrigPath = file.path;
 	file.revOrigBase = file.base;
 	file.revHash = revHash(file.contents);
-	file.path = revPath(file.path, file.revHash);
+	file.revString = (file.hashPrefix.length ? file.hashPrefix + '-' : '') + file.revHash;
+	file.path = revPath(file.path, file.revString);
 }
 
-var plugin = function () {
+var plugin = function (opts) {
 	var sourcemaps = [];
 	var pathMap = {};
+
+	opts = objectAssign({
+		hashPrefix: ''
+	}, opts);
 
 	return through.obj(function (file, enc, cb) {
 		if (file.isNull()) {
@@ -62,6 +67,8 @@ var plugin = function () {
 			return;
 		}
 
+		file.hashPrefix = opts.hashPrefix;
+
 		// This is a sourcemap, hold until the end
 		if (path.extname(file.path) === '.map') {
 			sourcemaps.push(file);
@@ -71,7 +78,7 @@ var plugin = function () {
 
 		var oldPath = file.path;
 		transformFilename(file);
-		pathMap[oldPath] = file.revHash;
+		pathMap[oldPath] = file.revString;
 		cb(null, file);
 
 	}, function (cb) {
