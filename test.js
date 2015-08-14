@@ -341,3 +341,26 @@ it('should store the hashPrefix for later', function (cb) {
 		contents: new Buffer('')
 	}));
 });
+
+it('should handle sourcemaps transparently when hashPrefix is used', function (cb) {
+	var stream = rev({
+		hashPrefix: 'revisioned'
+	});
+
+	stream.on('data', function (file) {
+		if (path.extname(file.path) === '.map') {
+			assert.equal(file.path, 'maps/pastissada-revisioned-d41d8cd98f.css.map');
+			cb();
+		}
+	});
+
+	stream.write(new gutil.File({
+		path: 'pastissada.css',
+		contents: new Buffer('')
+	}));
+
+	stream.end(new gutil.File({
+		path: 'maps/pastissada.css.map',
+		contents: new Buffer(JSON.stringify({file: 'pastissada.css'}))
+	}));
+});
