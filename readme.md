@@ -29,7 +29,14 @@ gulp.task('default', function () {
 
 ## API
 
-### rev()
+### rev([options])
+
+#### hashPrefix
+
+Type: `string`  
+Default: `none`
+
+Prefix the hash with a custom string.
 
 ### rev.manifest([path], [options])
 
@@ -69,9 +76,19 @@ Merge existing manifest file.
 Original file paths are stored at `file.revOrigPath`. This could come in handy for things like rewriting references to the assets.
 
 
+### Asset revString
+
+The revision string of each rev'd file is stored at `file.revString`. You can use this for customizing the file renaming, or for building different manifest formats.
+
+
+### Asset hashPrefix
+
+The hash prefix of each rev'd file is stored at `file.hashPrefix`.
+
+
 ### Asset hash
 
-The hash of each rev'd file is stored at `file.revHash`. You can use this for customizing the file renaming, or for building different manifest formats.
+The hash of each rev'd file is stored at `file.revHash`.
 
 
 ### Asset manifest
