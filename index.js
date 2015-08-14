@@ -67,14 +67,14 @@ var plugin = function (opts) {
 			return;
 		}
 
-		file.hashPrefix = opts.hashPrefix;
-
 		// This is a sourcemap, hold until the end
 		if (path.extname(file.path) === '.map') {
 			sourcemaps.push(file);
 			cb();
 			return;
 		}
+
+		file.hashPrefix = opts.hashPrefix;
 
 		var oldPath = file.path;
 		transformFilename(file);
