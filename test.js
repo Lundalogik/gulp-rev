@@ -342,6 +342,7 @@ it('should store the hashPrefix for later', function (cb) {
 	}));
 });
 
+
 it('should handle sourcemaps transparently when hashPrefix is used', function (cb) {
 	var stream = rev({
 		hashPrefix: 'revisioned'
@@ -362,5 +363,35 @@ it('should handle sourcemaps transparently when hashPrefix is used', function (c
 	stream.end(new gutil.File({
 		path: 'maps/pastissada.css.map',
 		contents: new Buffer(JSON.stringify({file: 'pastissada.css'}))
+	}));
+});
+
+it('should store the revString for later', function (cb) {
+	var stream = rev();
+
+	stream.on('data', function (file) {
+		assert.equal(file.revString, 'd41d8cd98f');
+		cb();
+	});
+
+	stream.write(new gutil.File({
+		path: 'unicorn.css',
+		contents: new Buffer('')
+	}));
+});
+
+it('should store the revString with prefix for later', function (cb) {
+	var stream = rev({
+		hashPrefix: 'revisioned'
+	});
+
+	stream.on('data', function (file) {
+		assert.equal(file.revString, 'revisioned-d41d8cd98f');
+		cb();
+	});
+
+	stream.write(new gutil.File({
+		path: 'unicorn.css',
+		contents: new Buffer('')
 	}));
 });
