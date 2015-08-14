@@ -34,7 +34,7 @@ gulp.task('default', function () {
 #### hashPrefix
 
 Type: `string`  
-Default: `none`
+Default: `empty string`
 
 Prefix the hash with a custom string.
 
